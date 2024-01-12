@@ -175,7 +175,7 @@ class STFT(th.nn.Module):
             imag = input1*th.sin(input2)
         inputs = th.cat([real, imag], dim=1)
         outputs = F.conv_transpose1d(inputs, self.ifft_k, stride=self.win_hop)
-        t = (self.padded_window[None, :, None]).repeat(1, 1, inputs.size(-1))
+        t = (self.padded_window[None, :, None]).repeat(inputs.size(0), 1, inputs.size(-1))
         t = t.to(inputs.device)
         coff = F.conv_transpose1d(t, self.ola_k, stride=self.win_hop)
         rm_start, rm_end = self.pad_amount, self.pad_amount+self.num_samples
